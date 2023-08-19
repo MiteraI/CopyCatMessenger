@@ -8,6 +8,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import message.app.dtos.AccountDto;
 import message.app.dtos.CredentialsDto;
+import message.app.entities.enums.Role;
 import message.app.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,10 +42,29 @@ public class UserAuthenticationProvider {
                 .withSubject(accountDto.getUsername())
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
+                .withClaim("accountId", accountDto.getAccountId())
+                .withClaim("role", accountDto.getRole().toString())
                 .sign(algorithm);
     }
 
     public Authentication validateToken(String token) {
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+
+        JWTVerifier verifier = JWT.require(algorithm)
+                .build();
+
+        DecodedJWT decoded = verifier.verify(token);
+
+        AccountDto user = AccountDto.builder()
+                .username(decoded.getSubject())
+                .accountId(decoded.getClaim("accountId").asLong())
+                .role(Role.valueOf(decoded.getClaim("role").asString()))
+                .build();
+
+        return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+    }
+
+    public Authentication validateTokenStrongly(String token) {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
         JWTVerifier verifier = JWT.require(algorithm)
