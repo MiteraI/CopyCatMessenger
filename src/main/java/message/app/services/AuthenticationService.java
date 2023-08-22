@@ -26,7 +26,7 @@ public class AuthenticationService {
         Account account = accountRepository.findByUsername(credentialsDto.username())
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
         if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.password()), account.getPassword())) {
-            return accountMapper.toUserDto(account);
+            return accountMapper.toAccountDto(account);
         }
         throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
@@ -42,12 +42,12 @@ public class AuthenticationService {
         account.setRole(Role.USR);
         Account savedAccount = accountRepository.save(account);
 
-        return accountMapper.toUserDto(savedAccount);
+        return accountMapper.toAccountDto(savedAccount);
     }
 
     public AccountDto findByLogin(String username) {
         Account account = accountRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
-        return accountMapper.toUserDto(account);
+        return accountMapper.toAccountDto(account);
     }
 }

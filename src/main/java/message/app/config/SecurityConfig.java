@@ -3,6 +3,7 @@ package message.app.config;
 import lombok.RequiredArgsConstructor;
 import message.app.config.customfilters.JwtAuthenticationFilter;
 import message.app.config.customfilters.UserAuthenticationEntryPoint;
+import message.app.entities.enums.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,7 +28,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.POST, "/login", "/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/test").hasAuthority(Role.USR.name())
                         .anyRequest().authenticated());
         return httpSecurity.build();
     }

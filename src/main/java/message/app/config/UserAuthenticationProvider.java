@@ -13,11 +13,14 @@ import message.app.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Component
 public class UserAuthenticationProvider {
@@ -60,8 +63,8 @@ public class UserAuthenticationProvider {
                 .accountId(decoded.getClaim("accountId").asLong())
                 .role(Role.valueOf(decoded.getClaim("role").asString()))
                 .build();
-
-        return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+        //Return principle which is who user is, credentials is proof for who user is, granted authorities needed to be read in security config
+        return new UsernamePasswordAuthenticationToken(user, null, List.of(new SimpleGrantedAuthority(user.getRole().name())));
     }
 
     public Authentication validateTokenStrongly(String token) {

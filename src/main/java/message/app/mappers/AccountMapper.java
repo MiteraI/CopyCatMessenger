@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
-    AccountDto toUserDto(Account account);
+    AccountDto toAccountDto(Account account);
 
     @Mapping(target = "password", ignore = true)
     Account signUpToAccount(SignupDto signupDto);
