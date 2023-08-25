@@ -5,11 +5,11 @@ import Provider from "@/components/Provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Login Page",
-  description: "Login page for CopyCat Messenger",
+  title: "Register Page",
+  description: "Register page for CopyCat Messenger",
 };
 
-export default function LoginLayout({ children }: { children: React.ReactNode }) {
+export default function RegisterLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className="overflow-x-hidden">

@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { z } from "zod";
 
 const loginSchema = z.object({
@@ -10,33 +10,29 @@ const loginSchema = z.object({
   password: z.string().min(1, { message: "Password is required" }),
 });
 
-type FormValues = {
+type LoginFormValues = {
   username: string;
   password: string;
 };
 
 export default function LoginPage() {
-  const { register, handleSubmit, control, formState } = useForm<FormValues>({
+  const { register, handleSubmit, formState } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
-
   const { errors } = formState;
 
-  const submitLoginCredentials = async (formValues: FormValues) => {
+  const submitLoginCredentials = async (formValues: LoginFormValues) => {
     await signIn("credentials", {
       username: formValues?.username,
       password: formValues?.password,
       redirect: true,
       callbackUrl: "/",
     });
-    console.log(formValues);
   };
   return (
-    <main className="flex h-full justify-center items-center m-20">
-      <form
-        onSubmit={handleSubmit(submitLoginCredentials)}
-        className="flex flex-col w-1/3 space-y-6"
-      >
+    <main className="flex flex-col h-full justify-center items-center m-20">
+      <p className="font-bold text-lg my-6">Login Form</p>
+      <form onSubmit={handleSubmit(submitLoginCredentials)} className="flex flex-col w-1/3 space-y-6">
         <div className="flex justify-between items-center">
           <p>Username:</p>
           <input
@@ -46,7 +42,7 @@ export default function LoginPage() {
           />
           <span className="text-red-500">{errors.username?.message}</span>
         </div>
-        <div className="flex justify-between items-center ">
+        <div className="flex justify-between items-center">
           <p>Password:</p>
           <input
             {...register("password")}

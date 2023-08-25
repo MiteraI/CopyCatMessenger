@@ -1,6 +1,7 @@
 package message.app.controllers;
 
 import lombok.RequiredArgsConstructor;
+import message.app.common.exceptions.AppException;
 import message.app.config.UserAuthenticationProvider;
 import message.app.dtos.AccountDto;
 import message.app.dtos.CredentialsDto;
@@ -22,16 +23,24 @@ public class AuthenticationController {
     private final UserAuthenticationProvider userAuthenticationProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<AccountDto> login(@RequestBody CredentialsDto credentialsDto) {
-        AccountDto accountDto = authenticationService.login(credentialsDto);
-        accountDto.setToken(userAuthenticationProvider.createToken(accountDto));
-        return ResponseEntity.ok(accountDto);
+    public ResponseEntity<Object> login(@RequestBody CredentialsDto credentialsDto) {
+        try {
+            AccountDto accountDto = authenticationService.login(credentialsDto);
+            accountDto.setToken(userAuthenticationProvider.createToken(accountDto));
+            return ResponseEntity.ok(accountDto);
+        } catch (AppException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AccountDto> register(@RequestBody SignupDto user) {
-        AccountDto createdUser = authenticationService.register(user);
-        createdUser.setToken(userAuthenticationProvider.createToken(createdUser));
-        return ResponseEntity.created(URI.create("/users/" + createdUser.getAccountId())).body(createdUser);
+    public ResponseEntity<Object> register(@RequestBody SignupDto user) {
+        try {
+            AccountDto createdUser = authenticationService.register(user);
+            createdUser.setToken(userAuthenticationProvider.createToken(createdUser));
+            return ResponseEntity.created(URI.create("/users/" + createdUser.getAccountId())).body(createdUser);
+        } catch (AppException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        }
     }
 }
