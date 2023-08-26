@@ -2,8 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { z } from "zod";
+import Link from "next/link";
 
 const loginSchema = z.object({
   username: z.string().min(1, { message: "Username is required" }),
@@ -52,6 +53,7 @@ export default function LoginPage() {
           <span className="text-red-500">{errors.password?.message}</span>
         </div>
         <button type="submit">Login</button>
+        <Link href={"/register"} className="text-blue-500">Register</Link>
       </form>
     </main>
   );

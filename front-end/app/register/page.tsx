@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import axios from "@/lib/axios";
 import { z } from "zod";
-import { HttpStatusCode } from "axios";
+import Link from "next/link";
 
 const registerSchema = z.object({
   username: z.string().min(1, { message: "Username is required" }),
@@ -40,7 +40,7 @@ export default function RegisterPage() {
           callbackUrl: "/",
         });
       }).catch(() => {
-        console.log("Failed?");
+        console.log(response);
       });
   };
 
@@ -91,6 +91,7 @@ export default function RegisterPage() {
           Register
         </button>
       </form>
+      <Link href={"/login"} className="text-blue-400">Login</Link>
     </main>
   );
 }
