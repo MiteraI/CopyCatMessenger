@@ -13,7 +13,7 @@ export default function PostApi() {
       },
     };
     try {
-      const respone = await axiosBearer.get("/api/test", config);
+      const respone = await axiosBearer.get("/api/messages/test", config);
       console.log(respone);
       
     } catch (error) {

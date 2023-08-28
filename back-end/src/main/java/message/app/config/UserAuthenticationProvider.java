@@ -54,7 +54,7 @@ public class UserAuthenticationProvider {
 
         JWTVerifier verifier = JWT.require(algorithm)
                 .build();
-
+            
         DecodedJWT decoded = verifier.verify(token);
 
         AccountDto user = AccountDto.builder()

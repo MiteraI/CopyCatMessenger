@@ -3,8 +3,8 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import React from "react";
 
 export default function AuthButton() {
-  const { data: session } = useSession();
-  if (session && session.user !== undefined) {
+  const { data: session} = useSession();
+  if (session && session.user) {
     return (
       <div className="flex gap-4 ml-auto">
         <p className="text-sky-600">{session.user.username}</p>
@@ -13,11 +13,10 @@ export default function AuthButton() {
         </button>
       </div>
     );
-  } else {
-    return (
-      <button onClick={() => signIn()} className="text-green-600 ml-auto">
-        Sign In
-      </button>
-    );
   }
+  return (
+    <button onClick={() => signIn()} className="text-green-600 ml-auto">
+      Sign In
+    </button>
+  );
 }

@@ -91,7 +91,12 @@ export default function RegisterPage() {
           Register
         </button>
       </form>
-      <Link href={"/login"} className="text-blue-400">Login</Link>
+      <Link href={"/login"} className="text-blue-400">
+        Login
+      </Link>
+      <Link href={"/"} className="text-blue-400">
+        Home
+      </Link>
     </main>
   );
 }

@@ -22,5 +22,9 @@ public class ProfileController {
     public ResponseEntity<ProfileDto> getProfile() {
         return ResponseEntity.ok(new ProfileDto());
     }
+    @GetMapping(value = "/avatar")
+    public ResponseEntity<byte[]> getAvatar() {
+        return ResponseEntity.ok().body(new byte[0]);
+    }
 
 }
