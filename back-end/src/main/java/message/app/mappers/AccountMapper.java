@@ -1,7 +1,7 @@
 package message.app.mappers;
 
-import message.app.dtos.AccountDto;
-import message.app.dtos.SignupDto;
+import message.app.dtos.account.AccountDto;
+import message.app.dtos.account.SignupDto;
 import message.app.entities.Account;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

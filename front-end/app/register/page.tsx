@@ -20,14 +20,14 @@ type RegisterFormValues = {
   dob: string;
 };
 
-export default function RegisterPage() {
+export default function RegisterPage(): React.ReactNode {
   const { register, watch, handleSubmit, formState } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
   });
 
   const { errors, isSubmitted, isSubmitting } = formState;
 
-  const submitRegister = async (formValues: RegisterFormValues) => {
+  const submitRegister = async (formValues: RegisterFormValues): Promise<any> => {
     const response = await axios
       .post("/api/auth/register", 
         formValues,

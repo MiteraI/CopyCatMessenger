@@ -11,18 +11,22 @@ import java.io.IOException;
 public class ImageScaler implements FileScaler {
     @Override
     public byte[] scale(byte[] file, String fileExtension) throws IOException {
-        byte[] resizedImageData = new byte[0];
         try {
+            byte[] resizedImageData;
             BufferedImage resizedImage = Thumbnails.of(new ByteArrayInputStream(file))
                     .size(240, 240)
                     .asBufferedImage();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            ImageIO.write(resizedImage, fileExtension, outputStream);
-            resizedImageData = outputStream.toByteArray();
+            try {
+                ImageIO.write(resizedImage, fileExtension, outputStream);
+                resizedImageData = outputStream.toByteArray();
+            } finally {
+                outputStream.close();
+            }
+            return resizedImageData;
         } catch (IOException e) {
             e.printStackTrace();
             throw e;
         }
-        return resizedImageData;
     }
 }

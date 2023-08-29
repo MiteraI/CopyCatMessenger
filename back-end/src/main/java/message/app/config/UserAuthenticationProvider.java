@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import message.app.dtos.AccountDto;
+import message.app.dtos.account.AccountDto;
 import message.app.entities.enums.Role;
 import message.app.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Value;

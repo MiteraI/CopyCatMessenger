@@ -1,4 +1,4 @@
-package message.app.dtos;
+package message.app.dtos.account;
 
 import java.time.LocalDate;
 

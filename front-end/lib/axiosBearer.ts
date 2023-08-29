@@ -11,7 +11,7 @@ const axiosBearer = axios.create({
 axiosBearer.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if ((error.response.status = 401)) {
+    if ((error.response.status === 401)) {
       await signOut({ redirect: true, callbackUrl: "/login" });
     }
     return Promise.reject(error);

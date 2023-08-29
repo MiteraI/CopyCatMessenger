@@ -1,3 +1,3 @@
-package message.app.dtos;
+package message.app.dtos.account;
 
 public record CredentialsDto(String username, char[] password) { }

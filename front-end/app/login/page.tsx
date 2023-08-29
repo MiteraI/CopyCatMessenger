@@ -16,13 +16,13 @@ type LoginFormValues = {
   password: string;
 };
 
-export default function LoginPage() {
+export default function LoginPage(): React.ReactNode {
   const { register, handleSubmit, formState } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
   const { errors } = formState;
 
-  const submitLoginCredentials = async (formValues: LoginFormValues) => {
+  const submitLoginCredentials = async (formValues: LoginFormValues): Promise<any> => {
     await signIn("credentials", {
       username: formValues?.username,
       password: formValues?.password,

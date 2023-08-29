@@ -1,19 +1,18 @@
-package message.app.dtos;
+package message.app.dtos.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
+import message.app.entities.enums.Role;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProfileDto {
+public class AccountDto {
     private Long accountId;
     private String username;
-    private String introduction;
-    private LocalDate dob;
+    private Role role;
+    private String token;
 }

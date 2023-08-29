@@ -1,5 +1,10 @@
+import Navbar from "@/components/Navbar";
+
 export default function MyProfilePage() {
-    return (
-        <>Profile</>
-    )
-};
+  return (
+    <>
+      <Navbar></Navbar>
+      <p>Profile page</p>
+    </>
+  );
+}
