@@ -29,17 +29,16 @@ export default function RegisterPage(): React.ReactNode {
 
   const submitRegister = async (formValues: RegisterFormValues): Promise<any> => {
     const response = await axios
-      .post("/api/auth/register", 
-        formValues,
-      )
-      .then(async () => {        
+      .post("/api/auth/register", formValues)
+      .then(async () => {
         await signIn("credentials", {
           username: formValues?.username,
           password: formValues?.password,
           redirect: true,
           callbackUrl: "/",
         });
-      }).catch(() => {
+      })
+      .catch(() => {
         console.log(response);
       });
   };
