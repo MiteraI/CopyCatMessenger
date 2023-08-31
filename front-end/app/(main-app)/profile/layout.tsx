@@ -1,4 +1,3 @@
-import "../globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function ProfileLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return <main className="flex justify-between mx-32 my-16">{children}</main>;
 }

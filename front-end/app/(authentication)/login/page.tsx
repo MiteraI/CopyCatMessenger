@@ -53,8 +53,11 @@ export default function LoginPage(): React.ReactNode {
           <span className="text-red-500">{errors.password?.message}</span>
         </div>
         <button type="submit">Login</button>
-        <Link href={"/register"} className="text-blue-500">Register</Link>
+        <Link href={"/register"} className="text-blue-500">
+          Register
+        </Link>
       </form>
     </main>
   );
 }
+

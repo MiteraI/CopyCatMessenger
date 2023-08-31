@@ -1,5 +1,6 @@
 package message.app.config.customfilters;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,9 +31,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(
                             provider.validateToken(authElements[1])
                     );
-                } catch (Exception e) {
+                } catch (TokenExpiredException e) {
                     SecurityContextHolder.clearContext();
-                    throw e;
                 }
             }
         }
