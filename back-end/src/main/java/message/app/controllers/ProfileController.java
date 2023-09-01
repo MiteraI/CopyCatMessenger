@@ -25,17 +25,27 @@ public class ProfileController {
         return ResponseEntity.ok(new ArrayList<ProfileDto>());
     }
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ProfileDto> getProfile() {
+    public ResponseEntity<ProfileDto> getUserProfile() {
         return ResponseEntity.ok(new ProfileDto());
     }
     @GetMapping(value = "/avatar")
-    public ResponseEntity<byte[]> getAvatar() {
+    public ResponseEntity<byte[]> getSelfAvatar() {
         AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             byte[] avatar = profileService.getAccountAvatar(authenticatedAccount.getAccountId());
             return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(avatar);
         } catch (AppException e) {
-            return ResponseEntity.status(e.getStatus()).body(new byte[0]);
+            return ResponseEntity.status(e.getStatus()).build();
+        }
+    }
+    @GetMapping(value = "/info")
+    public ResponseEntity<ProfileDto> getSelfInfo() {
+        AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            ProfileDto info = profileService.getAccountProfile(authenticatedAccount.getAccountId());
+            return ResponseEntity.ok().body(info);
+        } catch (AppException e) {
+            return ResponseEntity.status(e.getStatus()).build();
         }
     }
 

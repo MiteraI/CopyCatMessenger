@@ -9,7 +9,7 @@ export default function AvatarProfile() {
 
   return (
     <div className="flex flex-col w-1/2 justify-evenly items-center">
-      <img src={avatar} alt="Avatar" className="rounded-md"/>
+      <img src={avatar} alt="Avatar" className="rounded-md" />
     </div>
   );
 }
