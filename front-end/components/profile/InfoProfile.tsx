@@ -31,7 +31,6 @@ export default function InfoProfile(): React.ReactNode {
   //const [profileInfo, setProfileInfo] = useState<ProfileDto | null>(null);
   const { data: session } = useSession();
   const profileInfo = fetchProfileInfo(session?.user?.token);
-  console.log(profileInfo);
 
   return (
     <div className="w-1/2 border-2 border-black">

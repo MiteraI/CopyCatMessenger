@@ -1,7 +1,8 @@
 import AuthButton from "@/components/AuthButton";
 import PostApi from "@/components/PostApi";
 import Link from "next/link";
-export default function Home(): React.ReactNode {
+
+export default async function Home() {  
   return (
     <>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -20,3 +21,6 @@ export default function Home(): React.ReactNode {
     </>
   );
 }
+
+
+

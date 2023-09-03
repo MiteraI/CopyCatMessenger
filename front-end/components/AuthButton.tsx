@@ -4,7 +4,7 @@ import React from "react";
 
 export default function AuthButton() {
   const { data: session} = useSession();
-  if (session && session.user) {
+  if (session) {
     return (
       <div className="flex gap-4 ml-auto">
         <p className="text-sky-600">{session.user.username}</p>
