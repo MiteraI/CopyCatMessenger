@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import message.app.entities.enums.MessageType;
+import org.hibernate.annotations.Nationalized;
 
 @Data
 @NoArgsConstructor
@@ -44,6 +45,7 @@ public class Message {
     @Column(
             length = 512
     )
+    @Nationalized
     private String content;
 
     @Enumerated(EnumType.STRING)

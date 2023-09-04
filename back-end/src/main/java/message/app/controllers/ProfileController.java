@@ -5,12 +5,11 @@ import message.app.common.exceptions.AppException;
 import message.app.dtos.account.AccountDto;
 import message.app.dtos.account.ProfileDto;
 import message.app.services.ProfileService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,14 +38,23 @@ public class ProfileController {
         }
     }
     @GetMapping(value = "/info")
-    public ResponseEntity<ProfileDto> getSelfInfo() {
+    public ResponseEntity<Object> getSelfInfo() {
         AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
-            ProfileDto info = profileService.getAccountProfile(authenticatedAccount.getAccountId());
-            return ResponseEntity.ok().body(info);
+            ProfileDto profile = profileService.getAccountProfile(authenticatedAccount.getAccountId());
+            return ResponseEntity.ok(profile);
         } catch (AppException e) {
-            return ResponseEntity.status(e.getStatus()).build();
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
         }
     }
-
+    @PutMapping(value = "/update")
+    public ResponseEntity<Object> updateProfile(@RequestBody ProfileDto profile) {
+        AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            ProfileDto updatedProfile = profileService.updateAccountProfile(authenticatedAccount.getAccountId(), profile);
+            return ResponseEntity.ok(updatedProfile);
+        } catch (AppException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        }
+    }
 }

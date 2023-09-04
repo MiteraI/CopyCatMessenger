@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import message.app.entities.enums.Role;
+import org.hibernate.annotations.Nationalized;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,6 +41,7 @@ public class Account implements UserDetails {
     @Column(
             length = 512
     )
+    @Nationalized
     private String introduction;
 
     @Basic

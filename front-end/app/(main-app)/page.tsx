@@ -1,26 +1,14 @@
-import AuthButton from "@/components/AuthButton";
-import PostApi from "@/components/PostApi";
-import Link from "next/link";
+import AutoFixNormalIcon from "@mui/icons-material/AutoFixNormal";
 
-export default async function Home() {  
+export default function Home() {
   return (
     <>
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <main className="flex flex-col items-center justify-between p-24">
         <div>
-          <p className="lol">Main page</p>
-          <span>
-            <AuthButton></AuthButton>
-          </span>
+          <p>Main page</p>
+          <AutoFixNormalIcon sx={{color: "blueviolet"}}/>
         </div>
-        <PostApi></PostApi>
-        <Link href={"/register"} className="text-blue-400">
-          register
-        </Link>
-        <Link href={"/profile"}>Profile page</Link>
       </main>
     </>
   );
 }
-
-
-
