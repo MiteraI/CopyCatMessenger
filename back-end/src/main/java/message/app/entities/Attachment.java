@@ -23,7 +23,6 @@ public class Attachment {
             name = "attachment_file",
             length = 15*1024*1024
     )
-
     private byte[] attachmentFile;
 
     @Enumerated(EnumType.STRING)

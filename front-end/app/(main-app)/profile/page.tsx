@@ -22,13 +22,13 @@ async function getInfoProfile(token: any): Promise<ProfileDto> {
 
 export default async function MyProfilePage() {
   const session = await getServerSession(options);
-  const tokenSession = session?.user?.token;
-  const profileInfo = await getInfoProfile(tokenSession);
+  const jwtToken = session?.user?.token;
+  const profileInfo = await getInfoProfile(jwtToken);
   
   return (
     <>
-      <AvatarProfile></AvatarProfile>
-      <InfoProfile profileInfo={profileInfo} token={tokenSession}></InfoProfile>
+      <AvatarProfile token={jwtToken}></AvatarProfile>
+      <InfoProfile profileInfo={profileInfo} token={jwtToken}></InfoProfile>
     </>
   );
 }

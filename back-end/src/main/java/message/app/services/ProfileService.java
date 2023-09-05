@@ -9,8 +9,6 @@ import message.app.repositories.AccountRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -33,9 +31,13 @@ public class ProfileService {
         account.setUsername(profile.getUsername());
         account.setIntroduction(profile.getIntroduction());
         account.setDob(profile.getDob());
-        System.out.println(profile);
-        System.out.println(account);
         ProfileDto updatedProfile = accountMapper.toProfileDto(accountRepository.save(account));
         return updatedProfile;
+    }
+    public void updateAccountAvatar(Long accountId, byte[] avatar) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
+        account.setAvatar(avatar);
+        accountRepository.save(account);
     }
 }

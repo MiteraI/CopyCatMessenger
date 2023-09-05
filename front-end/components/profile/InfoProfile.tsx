@@ -29,7 +29,7 @@ export default function InfoProfile({ profileInfo, token }: { profileInfo: Profi
   const { errors, isSubmitted, isSubmitting } = formState;
 
   return (
-    <div className="w-2/3">
+    <div className="w-2/3 py-8">
       <form onSubmit={handleSubmit(submitProfileChange)} className="flex flex-col space-y-4">
         <div>
           <p>Username</p>

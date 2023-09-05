@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import message.app.entities.enums.MessageType;
 import org.hibernate.annotations.Nationalized;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -47,6 +49,10 @@ public class Message {
     )
     @Nationalized
     private String content;
+
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime sendTime;
 
     @Enumerated(EnumType.STRING)
     private MessageType messageType;
