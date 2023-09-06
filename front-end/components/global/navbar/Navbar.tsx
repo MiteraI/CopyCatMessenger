@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Avatar from "./Avatar";
+import { Session } from "next-auth";
 
-export default function Navbar({ session }: { session: any }): React.ReactNode {
+export default function Navbar({ session }: { session: Session | null }): React.ReactNode {
   return (
     <div className="flex justify-between px-12 py-4 border-2 shadow-md">
       <div>

@@ -4,12 +4,15 @@ import useAvatarQuery from "@/hooks/useAvatarQuery";
 import Image from "next/image";
 import axiosBearer from "@/lib/axiosBearer";
 import { useRef, useState, ChangeEvent } from "react";
+import { Session } from "next-auth";
 import { useQueryClient } from "react-query";
+import LoadingSubmit from "../global/LoadingSubmit";
 
-export default function AvatarProfile({ token }: { token: any }) {
-  const { data: avatar } = useAvatarQuery(token);
+export default function AvatarProfile({ session }: { session: Session | null }) {
+  const { data: avatar } = useAvatarQuery(session);
   const queryClient = useQueryClient();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -28,21 +31,30 @@ export default function AvatarProfile({ token }: { token: any }) {
       alert("Choose an image first");
       return;
     }
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("image", selectedImage);
 
     await axiosBearer
       .put("api/profile/update-avatar", formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${session?.user?.token}`,
           "Content-Type": "multipart/form-data",
         },
-      }).then(() => queryClient.invalidateQueries("avatar"))
-      .catch((error) => console.log(error));
+      })
+      .then(() => {
+        queryClient.invalidateQueries("avatar");
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
   };
 
   return (
     <div className="flex flex-col w-1/3 justify-evenly items-center space-y-8">
+      <LoadingSubmit isLoading={isLoading}>Updating your avatar...</LoadingSubmit>
       <input
         type="file"
         ref={fileInputRef}

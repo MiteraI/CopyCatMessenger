@@ -1,5 +1,6 @@
 package message.app.controllers;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import message.app.common.exceptions.AppException;
 import message.app.common.files.FileScaler;
@@ -33,53 +34,63 @@ public class ProfileController {
     }
     @GetMapping(value = "/avatar")
     public ResponseEntity<byte[]> getSelfAvatar() {
-        AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
+            AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             byte[] avatar = profileService.getAccountAvatar(authenticatedAccount.getAccountId());
             return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(avatar);
         } catch (AppException e) {
             return ResponseEntity.status(e.getStatus()).build();
+        } catch (ExpiredJwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
     @GetMapping(value = "/info")
     public ResponseEntity<Object> getSelfInfo() {
-        AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
+            AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             ProfileDto profile = profileService.getAccountProfile(authenticatedAccount.getAccountId());
             return ResponseEntity.ok(profile);
         } catch (AppException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        } catch (ExpiredJwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
     @PutMapping(value = "/update")
     public ResponseEntity<Object> updateProfile(@RequestBody ProfileDto profile) {
-        AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
+            AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             ProfileDto updatedProfile = profileService.updateAccountProfile(authenticatedAccount.getAccountId(), profile);
             return ResponseEntity.ok(updatedProfile);
         } catch (AppException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        } catch (ExpiredJwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
     @PutMapping(value = "/update-avatar")
     public ResponseEntity<Object> updateAvatar(@RequestPart("image") MultipartFile imageData) {
-        AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        FileScaler imageScaler = new ImageScaler();
-        String filename = imageData.getOriginalFilename();
-        String fileExtension = filename.substring(filename.lastIndexOf(".") + 1);
+        try {
+            AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            FileScaler imageScaler = new ImageScaler();
+            String filename = imageData.getOriginalFilename();
+            String fileExtension = filename.substring(filename.lastIndexOf(".") + 1);
 
-        if (imageData != null && !imageData.isEmpty()) {
-            try {
-                profileService.updateAccountAvatar(authenticatedAccount.getAccountId()
-                        , imageScaler.scale(imageData.getBytes(), fileExtension));
-                return ResponseEntity.ok("Saved avatar successfully");
-            } catch (AppException e) {
-                return ResponseEntity.status(e.getStatus()).body(e.getMessage());
-            } catch (IOException e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            if (imageData != null && !imageData.isEmpty()) {
+                try {
+                    profileService.updateAccountAvatar(authenticatedAccount.getAccountId()
+                            , imageScaler.scale(imageData.getBytes(), fileExtension));
+                    return ResponseEntity.ok("Saved avatar successfully");
+                } catch (AppException e) {
+                    return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+                } catch (IOException e) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                }
+            } else {
+                return ResponseEntity.badRequest().body("No image data provided");
             }
-        } else {
-            return ResponseEntity.badRequest().body("No image data provided");
+        } catch (ExpiredJwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 }

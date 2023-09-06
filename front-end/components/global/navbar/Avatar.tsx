@@ -5,10 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PeopleIcon from "@mui/icons-material/People";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 
-export default function Avatar({ session }: { session: any }): React.ReactNode {
+export default function Avatar({ session }: { session: Session | null }): React.ReactNode {
   const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const { data: avatar } = useAvatarQuery(session);
 
@@ -16,8 +17,26 @@ export default function Avatar({ session }: { session: any }): React.ReactNode {
     setDropdownOpen((prev) => (prev = !prev));
   };
 
+  const avatarRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (avatarRef.current && !avatarRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
   return (
-    <div>
+    <div ref={avatarRef}>
       <div onClick={toggleDropdown}>
         {avatar ? (
           <Image src={avatar} alt="Avatar" width={35} height={35} className="rounded-full" />

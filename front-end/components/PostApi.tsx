@@ -13,8 +13,8 @@ export default function PostApi(): React.ReactNode {
       },
     };
     try {
-      const respone = await axiosBearer.get("/api/profile", config);
-      console.log(respone);
+      const respone = await axiosBearer.get("/api/friend", config);
+      console.log(respone.data);
     } catch (error) {
       console.log(error);
     }
