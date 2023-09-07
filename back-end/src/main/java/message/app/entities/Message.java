@@ -35,7 +35,7 @@ public class Message {
     private Account account;
 
     @ManyToOne(
-        cascade = CascadeType.MERGE
+            cascade = CascadeType.MERGE
     )
     @JoinColumn(
             name = "conversation_id",

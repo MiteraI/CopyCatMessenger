@@ -1,7 +1,9 @@
 package message.app.controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
+import message.app.common.exceptions.AppException;
 import message.app.dtos.account.AccountDto;
 import message.app.dtos.friendrequest.RequestDto;
 import message.app.entities.Account;
@@ -13,9 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,8 +26,9 @@ import java.util.List;
 @RequestMapping(value = "/api/friend")
 public class FriendController {
     private final FriendRequestService friendRequestService;
+
     @GetMapping
-    public ResponseEntity<List<FriendRequest>> getFriends () {
+    public ResponseEntity<List<FriendRequest>> getFriends() {
         try {
             AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             FriendRequest friendRequest = FriendRequest.builder()
@@ -42,22 +43,31 @@ public class FriendController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
     @GetMapping(value = "/sent-request")
-    public ResponseEntity<List<RequestDto>> getSentFriendRequests () {
-        try {
-            AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            return ResponseEntity.ok(friendRequestService.getSentRequest(authenticatedAccount.getAccountId()));
-        } catch (ExpiredJwtException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public ResponseEntity<List<RequestDto>> getSentFriendRequests() {
+        AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(friendRequestService.getSentRequest(authenticatedAccount.getAccountId()));
     }
+
     @GetMapping(value = "/received-request")
-    public ResponseEntity<List<RequestDto>> getReceivedFriendRequests () {
+    public ResponseEntity<List<RequestDto>> getReceivedFriendRequests() {
+        AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(friendRequestService.getReceivedRequest(authenticatedAccount.getAccountId()));
+    }
+
+    @PostMapping(value = "/create-request")
+    public ResponseEntity<Object> createFriendRequest(@RequestBody JsonNode request) {
         try {
             AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            return ResponseEntity.ok(friendRequestService.getReceivedRequest(authenticatedAccount.getAccountId()));
-        } catch (ExpiredJwtException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            RequestDto friendRequest = friendRequestService.createRequest(
+                    authenticatedAccount.getAccountId()
+                    , request.asText("username")
+                    , request.asText("message")
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).body(friendRequest);
+        } catch (AppException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
         }
     }
 

@@ -2,6 +2,7 @@ package message.app.services;
 
 import lombok.RequiredArgsConstructor;
 import message.app.common.exceptions.AppException;
+import message.app.dtos.account.PeopleDto;
 import message.app.dtos.account.ProfileDto;
 import message.app.entities.Account;
 import message.app.mappers.AccountMapper;
@@ -25,6 +26,11 @@ public class ProfileService {
                 .orElseThrow(() -> new AppException("Unable to find avatar", HttpStatus.NOT_FOUND));
         return avatar;
     }
+    public PeopleDto getPeopleProfile(String username) {
+        PeopleDto profile = accountRepository.findPeopleByUsername(username)
+                .orElseThrow(() -> new AppException("Unable to find user", HttpStatus.NOT_FOUND));
+        return profile;
+    }
     public ProfileDto updateAccountProfile(Long accountId, ProfileDto profile) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
@@ -40,4 +46,5 @@ public class ProfileService {
         account.setAvatar(avatar);
         accountRepository.save(account);
     }
+
 }

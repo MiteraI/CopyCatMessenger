@@ -21,7 +21,7 @@ public class Attachment {
     @Lob
     @Column(
             name = "attachment_file",
-            length = 15*1024*1024
+            length = 15 * 1024 * 1024
     )
     private byte[] attachmentFile;
 
