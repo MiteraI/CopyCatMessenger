@@ -1,3 +1,3 @@
 export default function PeopleListLayout({ children }: { children: React.ReactNode }) {
-  return <main className="flex justify-between mx-32 my-16 overflow-x-hidden">{children}</main>;
+  return <main className="flex justify-between overflow-x-hidden">{children}</main>;
 }

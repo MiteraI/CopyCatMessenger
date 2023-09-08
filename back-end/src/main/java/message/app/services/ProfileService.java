@@ -10,6 +10,9 @@ import message.app.repositories.AccountRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @RequiredArgsConstructor
 @Service
@@ -17,7 +20,7 @@ public class ProfileService {
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
     public ProfileDto getAccountProfile(Long accountId) {
-        ProfileDto profile = accountRepository.findProfileByAccount(accountId)
+        ProfileDto profile = accountRepository.findProfileByAccountId(accountId)
                 .orElseThrow(() -> new AppException("Unable to find user", HttpStatus.NOT_FOUND));
         return profile;
     }
@@ -30,6 +33,10 @@ public class ProfileService {
         PeopleDto profile = accountRepository.findPeopleByUsername(username)
                 .orElseThrow(() -> new AppException("Unable to find user", HttpStatus.NOT_FOUND));
         return profile;
+    }
+    public List<PeopleDto> getPeopleWithStartingUsername(String username) {
+        List<PeopleDto> people = accountRepository.findPeopleByUsernameStartingWithLetter(username);
+        return people;
     }
     public ProfileDto updateAccountProfile(Long accountId, ProfileDto profile) {
         Account account = accountRepository.findById(accountId)

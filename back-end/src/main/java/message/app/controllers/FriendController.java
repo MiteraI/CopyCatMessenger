@@ -62,8 +62,8 @@ public class FriendController {
             AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             RequestDto friendRequest = friendRequestService.createRequest(
                     authenticatedAccount.getAccountId()
-                    , request.asText("username")
-                    , request.asText("message")
+                    , request.get("username").asText()
+                    , request.get("message").asText()
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(friendRequest);
         } catch (AppException e) {

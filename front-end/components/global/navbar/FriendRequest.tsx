@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Session } from "next-auth";
-import Link from "next/navigation";
 import EmailIcon from "@mui/icons-material/Email";
 import axiosBearer from "@/lib/axiosBearer";
 

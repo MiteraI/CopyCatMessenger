@@ -3,6 +3,7 @@ import { getServerSession, Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import Image from "next/image";
+import convertBlobUrl from "@/lib/convertBlobUrl";
 
 type PeopleProps = {
   params: {
@@ -29,17 +30,6 @@ async function fetchPeople(session: Session | null, username: string): Promise<P
       return error;
     });
   return (await response).data;
-}
-
-function convertBlobUrl(base64Avatar: string): string {
-  const binaryAvatar = atob(base64Avatar);
-  const byteArray = new Uint8Array(binaryAvatar.length);
-  for (let i = 0; i < binaryAvatar.length; i++) {
-    byteArray[i] = binaryAvatar.charCodeAt(i);
-  }
-  const avatarBlob = new Blob([byteArray], { type: "image/jpeg" });
-
-  return URL.createObjectURL(avatarBlob);
 }
 
 export default async function PeoplePage({ params: { username } }: PeopleProps) {

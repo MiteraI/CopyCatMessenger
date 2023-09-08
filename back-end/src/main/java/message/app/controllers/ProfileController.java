@@ -1,5 +1,6 @@
 package message.app.controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import message.app.common.exceptions.AppException;
@@ -28,8 +29,8 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @GetMapping
-    public ResponseEntity<List<ProfileDto>> getProfiles() {
-        return ResponseEntity.ok(new ArrayList<ProfileDto>());
+    public ResponseEntity<List<PeopleDto>> getPeople() {
+        return ResponseEntity.ok(new ArrayList<PeopleDto>());
     }
 
     @GetMapping(value = "/{username}")
@@ -40,6 +41,12 @@ public class ProfileController {
         } catch (AppException e) {
             return ResponseEntity.status(e.getStatus()).build();
         }
+    }
+
+    @PostMapping(value = "/search")
+    public ResponseEntity<List<PeopleDto>> getPeople(@RequestBody JsonNode username) {
+        List<PeopleDto> people = profileService.getPeopleWithStartingUsername(username.get("username").asText());
+        return ResponseEntity.ok(people);
     }
 
     @GetMapping(value = "/avatar")
