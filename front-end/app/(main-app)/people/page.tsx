@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
-import { options } from "@/app/api/auth/[...nextauth]/options";
 import axiosBearer from "@/lib/axiosBearer";
 import SearchIcon from "@mui/icons-material/Search";
 import LoadingSubmit from "@/components/global/LoadingSubmit";
@@ -73,7 +71,7 @@ export default function PeopleListPage() {
         {people ? (
           <>
             {people.map((person) => {
-              return <PeopleDiv {...person}></PeopleDiv>;
+              return <PeopleDiv key={person.accountId} {...person} session={session}></PeopleDiv>;
             })}
           </>
         ) : (

@@ -36,6 +36,9 @@ public class FriendRequestService {
             throw new AppException("Cannot create friend request with yourself", HttpStatus.BAD_REQUEST);
         Account receiver = accountRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException("Receiver's username not found", HttpStatus.NOT_FOUND));
+        if (checkAlreadyReceived()) throw new AppException("Already received request from this person", HttpStatus.BAD_REQUEST);
+        if (checkAlreadySent()) throw new AppException("Already sent request from this person", HttpStatus.BAD_REQUEST);
+        //Not yet implemented friend request logic
         RequestDto friendRequest = friendRequestMapper.toRequestDto(FriendRequest.builder()
                 .status(StatusType.PEN)
                 .sender(sender)
@@ -43,6 +46,15 @@ public class FriendRequestService {
                 .message(message)
                 .sendTime(LocalDateTime.now())
                 .build());
+
         return friendRequest;
+    }
+
+    private boolean checkAlreadyReceived() {
+        return true;
+    }
+
+    private boolean checkAlreadySent() {
+        return true;
     }
 }
