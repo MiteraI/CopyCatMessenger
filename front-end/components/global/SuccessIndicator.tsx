@@ -23,7 +23,6 @@ export default function SuccessIndicator({ status, message, setCallStatus }: Suc
         if (setCallStatus) setCallStatus(null);
       }, 2500);
     }
-    console.log("Status: " + status);
   }, [status]);
 
   return (

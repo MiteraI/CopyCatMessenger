@@ -2,6 +2,8 @@ package message.app.services;
 
 import lombok.RequiredArgsConstructor;
 import message.app.common.exceptions.AppException;
+import message.app.dtos.friendrequest.ReceivedRequestDto;
+import message.app.dtos.friendrequest.SentRequestDto;
 import message.app.dtos.friendrequest.RequestDto;
 import message.app.entities.Account;
 import message.app.entities.FriendRequest;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -22,12 +25,12 @@ public class FriendRequestService {
     private final AccountRepository accountRepository;
     private final FriendRequestMapper friendRequestMapper;
 
-    public List<RequestDto> getSentRequest(Long accountId) {
-        return friendRequestRepository.findRequestBySender_AccountId(accountId);
+    public List<SentRequestDto> getSentRequest(Long accountId) {
+        return friendRequestMapper.toSentRequestDtoList(friendRequestRepository.findBySender_AccountIdAndStatus(accountId, StatusType.PEN));
     }
 
-    public List<RequestDto> getReceivedRequest(Long accountId) {
-        return friendRequestRepository.findRequestByReceiver_AccountId(accountId);
+    public List<ReceivedRequestDto> getReceivedRequest(Long accountId) {
+        return friendRequestMapper.toReceivedRequestDtoList(friendRequestRepository.findByReceiver_AccountIdAndStatus(accountId, StatusType.PEN));
     }
 
     public RequestDto createRequest(Long accountId, String username, String message) {
@@ -36,25 +39,35 @@ public class FriendRequestService {
             throw new AppException("Cannot create friend request with yourself", HttpStatus.BAD_REQUEST);
         Account receiver = accountRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException("Receiver's username not found", HttpStatus.NOT_FOUND));
-        if (checkAlreadyReceived()) throw new AppException("Already received request from this person", HttpStatus.BAD_REQUEST);
-        if (checkAlreadySent()) throw new AppException("Already sent request from this person", HttpStatus.BAD_REQUEST);
-        //Not yet implemented friend request logic
-        RequestDto friendRequest = friendRequestMapper.toRequestDto(FriendRequest.builder()
-                .status(StatusType.PEN)
+        if (checkAlreadyReceived(sender.getAccountId(), receiver.getAccountId()))
+            throw new AppException("Already received request from this person", HttpStatus.BAD_REQUEST);
+        if (checkAlreadySent(sender.getAccountId(), receiver.getAccountId()))
+            throw new AppException("Already sent request to this person", HttpStatus.BAD_REQUEST);
+        FriendRequest friendRequest = FriendRequest.builder()
                 .sender(sender)
                 .receiver(receiver)
-                .message(message)
+                .status(StatusType.PEN)
                 .sendTime(LocalDateTime.now())
-                .build());
+                .message(message)
+                .build();
+        RequestDto friendRequestDto = friendRequestMapper.toRequestDto(friendRequestRepository.save(friendRequest));
 
-        return friendRequest;
+        return friendRequestDto;
     }
 
-    private boolean checkAlreadyReceived() {
-        return true;
+    private boolean checkAlreadyReceived(Long senderId, Long receiverId) {
+        Optional<FriendRequest> friendRequest = friendRequestRepository.findBySender_AccountIdAndReceiver_AccountIdAndStatus(receiverId, senderId, StatusType.PEN);
+        if (friendRequest.isPresent()) {
+            return true;
+        }
+        return false;
     }
 
-    private boolean checkAlreadySent() {
-        return true;
+    private boolean checkAlreadySent(Long senderId, Long receiverId) {
+        Optional<FriendRequest> friendRequest = friendRequestRepository.findBySender_AccountIdAndReceiver_AccountIdAndStatus(senderId, receiverId, StatusType.PEN);
+        if (friendRequest.isPresent()) {
+            return true;
+        }
+        return false;
     }
 }

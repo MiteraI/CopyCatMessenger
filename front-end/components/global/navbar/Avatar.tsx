@@ -46,7 +46,7 @@ export default function Avatar({ session }: { session: Session | null }): React.
       </div>
       {isDropdownOpen && (
         <div className="absolute right-0 flex flex-col w-1/6 border-2 rounded-lg shadow-lg bg-white mr-4 mt-2 py-4">
-          <Link href={"/profile"}>
+          <a href="/profile">
             <div className="flex items-center space-x-4 px-4 py-2 mx-2 rounded-lg hover:bg-slate-100 hover:cursor-pointer">
               {avatar ? (
                 <Image src={avatar} alt="Avatar" width={30} height={30} className="rounded-full" />
@@ -55,7 +55,7 @@ export default function Avatar({ session }: { session: Session | null }): React.
               )}
               <p className="font-medium">{session?.user?.username}</p>
             </div>
-          </Link>
+          </a>
           <div className="flex items-center space-x-4 px-4 py-2 mx-2 rounded-lg hover:bg-slate-100 hover:cursor-pointer">
             <div className="flex justify-center items-center w-[33px] h-[33px] bg-slate-200 rounded-full">
               <PeopleIcon />

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Avatar from "./Avatar";
-import FriendRequest from "./FriendRequest";
+import FriendRequestViewButton from "./FriendRequestViewButton";
 import { Session } from "next-auth";
 
 export default function Navbar({ session }: { session: Session | null }): React.ReactNode {
@@ -12,7 +12,7 @@ export default function Navbar({ session }: { session: Session | null }): React.
         </Link>
       </div>
       <div className="flex space-x-8">
-        <FriendRequest session={session}></FriendRequest>
+        <FriendRequestViewButton session={session}></FriendRequestViewButton>
         <Avatar session={session}></Avatar>
       </div>
     </div>

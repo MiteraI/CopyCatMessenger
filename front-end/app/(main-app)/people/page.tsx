@@ -62,7 +62,7 @@ export default function PeopleListPage() {
               placeholder="Enter name..."
             />
           </div>
-          <button type="submit" className="rounded-full px-10 py-2 text-white bg-blue-400">
+          <button type="submit" className="font-semibold rounded-full px-10 py-2 text-white bg-blue-600">
             Search
           </button>
         </form>
