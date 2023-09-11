@@ -34,7 +34,9 @@ export default function LoginPage(): React.ReactNode {
       redirect: false,
     }).then((resposne) => {
       setResult(resposne?.error);
-      router.push("/");
+      if (!resposne?.error) {
+        router.push("/");
+      }
     });
   };
   return (

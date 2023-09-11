@@ -15,11 +15,16 @@ public interface FriendRequestMapper {
     @Mapping(source = "receiver.accountId", target = "receiverId")
     RequestDto toRequestDto(FriendRequest friendRequest);
 
+    @Mapping(source = "friendRequestId", target = "requestId")
+
     SentRequestDto toSentRequestDto(FriendRequest friendRequest);
 
+    @Mapping(source = "friendRequestId", target = "requestId")
     List<SentRequestDto> toSentRequestDtoList(List<FriendRequest> friendRequestList);
 
+    @Mapping(source = "friendRequestId", target = "requestId")
     ReceivedRequestDto toReceivedRequestDto(FriendRequest friendRequest);
 
+    @Mapping(source = "friendRequestId", target = "requestId")
     List<ReceivedRequestDto> toReceivedRequestDtoList(List<FriendRequest> friendRequestList);
 }

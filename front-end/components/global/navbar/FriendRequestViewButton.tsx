@@ -67,10 +67,11 @@ export default function FriendRequestViewButton({ session }: { session: Session 
                   return (
                     <div key={request.requestId} className="w-full px-2">
                       <FriendRequest
-                        avatar={request.sender.avatar}
-                        username={request.sender.username}
+                        requestId={request.requestId}
+                        sender={request.sender}
                         message={request.message}
                         sendTime={request.sendTime}
+                        session={session}
                       ></FriendRequest>
                     </div>
                   );

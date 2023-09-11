@@ -51,13 +51,19 @@ public class FriendController {
         return ResponseEntity.ok(friendRequestService.getSentRequest(authenticatedAccount.getAccountId()));
     }
 
+    @GetMapping(value = "rejected-request")
+    public ResponseEntity<List<SentRequestDto>> getRejectedFriendRequests() {
+        AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(friendRequestService.getRejectedRequest(authenticatedAccount.getAccountId()));
+    }
+
     @GetMapping(value = "/received-request")
     public ResponseEntity<List<ReceivedRequestDto>> getReceivedFriendRequests() {
         AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok(friendRequestService.getReceivedRequest(authenticatedAccount.getAccountId()));
     }
 
-    @PostMapping(value = "/create-request")
+    @PostMapping
     public ResponseEntity<Object> createFriendRequest(@RequestBody JsonNode request) {
         try {
             AccountDto authenticatedAccount = (AccountDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -70,5 +76,29 @@ public class FriendController {
         } catch (AppException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
         }
+    }
+
+    @PutMapping("/accept")
+    public ResponseEntity<Object> acceptFriendRequest(@RequestBody JsonNode request) {
+        try {
+            RequestDto friendRequest = friendRequestService.acceptRequest(request.get("requestId").asLong());
+            return ResponseEntity.ok(friendRequest);
+        } catch (AppException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/reject")
+    public ResponseEntity<Object> rejectFriendRequest(@RequestBody JsonNode request) {
+        try {
+            RequestDto friendRequest = friendRequestService.rejectRequest(request.get("requestId").asLong());
+            return ResponseEntity.ok(friendRequest);
+        } catch (AppException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        }    }
+
+    @DeleteMapping
+    public ResponseEntity<Object> deleteFriendRequest(@RequestBody JsonNode request) {
+        return ResponseEntity.ok().build();
     }
 }

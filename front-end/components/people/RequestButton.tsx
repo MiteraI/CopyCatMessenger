@@ -7,6 +7,8 @@ import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import SuccessIndicator from "../global/SuccessIndicator";
 
+
+
 type RequestBtnProps = {
   username: string;
   session: Session | null;
@@ -24,7 +26,7 @@ export default function RequestButton({ username, session }: RequestBtnProps) {
   const { register, handleSubmit, formState } = useForm<FriendRequest>();
   const makeFriendRequest = async (request: FriendRequest) => {
     await axiosBearer
-      .post("api/friend/create-request", request, {
+      .post("api/friend", request, {
         headers: {
           Authorization: `Bearer ${session?.user?.token}`,
         },
