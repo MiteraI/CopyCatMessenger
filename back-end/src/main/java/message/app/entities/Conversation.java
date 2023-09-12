@@ -27,6 +27,10 @@ public class Conversation {
     @Column(length = 50)
     private String name;
 
+    @Lob
+    @Column(length = 4194304)
+    private byte[] conversationAvatar;
+
     @OneToMany(
             cascade = CascadeType.ALL,
             mappedBy = "conversation"
@@ -46,4 +50,5 @@ public class Conversation {
             )
     )
     private List<Account> accounts;
+
 }
