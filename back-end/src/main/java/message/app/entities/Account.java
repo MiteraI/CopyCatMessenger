@@ -55,6 +55,9 @@ public class Account implements UserDetails {
     @Column(length = 4194304)
     private byte[] avatar;
 
+    @ManyToMany(mappedBy = "accounts")
+    private List<Conversation> conversations;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
